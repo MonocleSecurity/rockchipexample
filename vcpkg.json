@@ -1,0 +1,9 @@
+{
+  "name": "monocle",
+  "version-string": "1.19.0",
+  "dependencies": [
+    {
+      "name": "glfw3"
+    }
+  ]
+}
