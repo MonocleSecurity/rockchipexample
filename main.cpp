@@ -12,6 +12,8 @@
 #include <GLFW/glfw3native.h>
 #include <iostream>
 #include <memory>
+#include <rga/rga.h>
+#include <rga/RockchipRga.h>
 #include <rockchip/rk_mpi.h>
 #include <rockchip/rk_type.h>
 #include <rockchip/vpu_api.h>
@@ -130,7 +132,7 @@ int main()
         if (mpp_frame_get_info_change(source_frame))
         {
           std::cout << "Frame dimensions and format changed" << std::endl;
-          ret = mpp_buffer_group_get_internal(&frame_group, MPP_BUFFER_TYPE_DMA_HEAP);
+          ret = mpp_buffer_group_get_internal(&frame_group, MPP_BUFFER_TYPE_DRM);
           if (ret)
           {
             std::cout << "Failed to set buffer group" << std::endl;
@@ -148,8 +150,8 @@ int main()
             std::cout << "Failed to retrieve buffer from frame" << std::endl;
             return -9;
           }
+          // Convert image
           const int fd = mpp_buffer_get_fd(mpp_buffer);
-          // Create EGL image
           const RK_U32 width = mpp_frame_get_width(source_frame);
           const RK_U32 height = mpp_frame_get_height(source_frame);
           const MppFrameFormat format = mpp_frame_get_fmt(source_frame);
@@ -157,6 +159,7 @@ int main()
           const RK_U32 offset_y = mpp_frame_get_offset_y(source_frame);
           const RK_U32 hor_stride = mpp_frame_get_hor_stride(source_frame);
           const RK_U32 ver_stride = mpp_frame_get_ver_stride(source_frame);
+          // Create EGL image
           std::cout << "Creating EGL image: " << width << " " << height << " " << format << " " << offset_x << " " << offset_y << " " << hor_stride << " " << ver_stride << std::endl;
           if (format != MPP_FMT_YUV420SP)
           {
