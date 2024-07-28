@@ -220,59 +220,6 @@ int main()
           const RK_U32 offset_y = mpp_frame_get_offset_y(source_frame);
           const RK_U32 hor_stride = mpp_frame_get_hor_stride(source_frame);
           const RK_U32 ver_stride = mpp_frame_get_ver_stride(source_frame);
-//          const rga_buffer_handle_t dma_handle = importbuffer_fd(fd, size);
-//          const rga_buffer_t dma_buffer = wrapbuffer_handle(dma_handle, width, height, RK_FORMAT_YCbCr_422_SP);
-          // Create a destination DMA buffer
-//          const size_t dst_buffer_size = width * height * 3;
-
-
-//TODO
-//          int dst_dma_fd = 0;
-//          char* dst_buf = nullptr;
-//          if (dma_buf_alloc(DMA_HEAP_UNCACHE_PATH, dst_buffer_size, &dst_dma_fd, (void **)&dst_buf))
-          {
-//            std::cout << "Failed to allocate DMA destination buffer" << std::endl;
-//            return -10;
-          }
-          
-
-
-
-
-
-
-
-
-/*TODO          char* dst_buf = reinterpret_cast<char*>(malloc(dst_buffer_size));
-          rga_buffer_handle_t dst_handle = importbuffer_virtualaddr(dst_buf, dst_buffer_size);
-          if (dst_handle == 0)
-          {
-            std::cout << "Failed to create destination buffer" << std::endl;
-            return -10;
-          }
-          const rga_buffer_t dst_buffer = wrapbuffer_handle(dst_handle, width, height, RK_FORMAT_RGB_888);*/
-
-
-
-
-//std::cout << dma_handle << " " << dma_buffer.fd << " " << dma_buffer.width << " " << dma_buffer.height << std::endl;//TODO
-//std::cout << dst_buffer.fd << " " << dst_buffer.width << " " << dst_buffer.height << std::endl;//TODO
-
-
-
-//TODO
-
-
-
-
-          // Convert buffer to RGB888
- 
-
-//TODO
-
-
-
-
           // Create EGL image
           std::cout << "Creating EGL image: " << width << " " << height << " " << format << " " << offset_x << " " << offset_y << " " << hor_stride << " " << ver_stride << std::endl;
           if (format != MPP_FMT_YUV420SP)
@@ -280,7 +227,6 @@ int main()
             std::cout << "Invalid frame format" << std::endl;
             return -10;
           }
-//          EGLAttrib atts[] = {
           EGLint atts[] = {
                                EGL_WIDTH, width,
                                EGL_HEIGHT, height,
@@ -291,17 +237,10 @@ int main()
                                EGL_DMA_BUF_PLANE1_FD_EXT, fd,
                                EGL_DMA_BUF_PLANE1_OFFSET_EXT, offset_x + (hor_stride * height),
                                EGL_DMA_BUF_PLANE1_PITCH_EXT, hor_stride,
-//                               EGL_LINUX_DRM_FOURCC_EXT, DRM_FORMAT_RGB888,
-//                               EGL_DMA_BUF_PLANE0_FD_EXT, dst_dma_fd,
-//                               EGL_DMA_BUF_PLANE0_OFFSET_EXT, 0,
-//                               EGL_DMA_BUF_PLANE0_PITCH_EXT, width,//TODO maybe pitch/stride?
                                EGL_NONE
                              };
-//          const EGLImageKHR egl_image = eglCreateImage(glfwGetEGLDisplay(), glfwGetEGLContext(window), EGL_LINUX_DMA_BUF_EXT, nullptr, atts); // Fails to create image here!!!
-
-//TODO
-          PFNEGLCREATEIMAGEKHRPROC eglCreateImageKHRt = (PFNEGLCREATEIMAGEKHRPROC)eglGetProcAddress("eglCreateImageKHR");
-          const EGLImageKHR egl_image = eglCreateImageKHRt(glfwGetEGLDisplay(), EGL_NO_CONTEXT, EGL_LINUX_DMA_BUF_EXT, nullptr, atts); // Fails to create image here!!!
+          PFNEGLCREATEIMAGEKHRPROC eglCreateImageKHR = (PFNEGLCREATEIMAGEKHRPROC)eglGetProcAddress("eglCreateImageKHR");
+          const EGLImageKHR egl_image = eglCreateImageKHR(glfwGetEGLDisplay(), EGL_NO_CONTEXT, EGL_LINUX_DMA_BUF_EXT, nullptr, atts); // Fails to create image here!!!
           if (egl_image == EGL_NO_IMAGE_KHR)
           {
             std::cout << "Failed to create EGL image" << std::endl;
