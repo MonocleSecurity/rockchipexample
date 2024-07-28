@@ -12,7 +12,10 @@
 #include <GLFW/glfw3native.h>
 #include <iostream>
 #include <memory>
+#include <rga/im2d.hpp>
+#include <rga/im2d_buffer.h>
 #include <rga/rga.h>
+#include <rga/RgaUtils.h>
 #include <rga/RockchipRga.h>
 #include <rockchip/rk_mpi.h>
 #include <rockchip/rk_type.h>
@@ -150,8 +153,9 @@ int main()
             std::cout << "Failed to retrieve buffer from frame" << std::endl;
             return -9;
           }
-          // Convert image
+          // Retrieve DMA version of the buffer
           const int fd = mpp_buffer_get_fd(mpp_buffer);
+          const size_t size = mpp_buffer_get_size(mpp_buffer);
           const RK_U32 width = mpp_frame_get_width(source_frame);
           const RK_U32 height = mpp_frame_get_height(source_frame);
           const MppFrameFormat format = mpp_frame_get_fmt(source_frame);
@@ -159,6 +163,24 @@ int main()
           const RK_U32 offset_y = mpp_frame_get_offset_y(source_frame);
           const RK_U32 hor_stride = mpp_frame_get_hor_stride(source_frame);
           const RK_U32 ver_stride = mpp_frame_get_ver_stride(source_frame);
+          const rga_buffer_handle_t dma_handle = importbuffer_fd(fd, size);
+          const rga_buffer_t dma_buffer = wrapbuffer_handle(dma_handle, width, height, RK_FORMAT_YCbCr_422_SP);
+std::cout << dma_handle << " " << dma_buffer.fd << " " << dma_buffer.width << " " << dma_buffer.height << std::endl;//TODO
+          // Create a destination DMA buffer
+
+//TODO
+
+
+
+
+          // Convert buffer to RGB888
+ 
+
+//TODO
+
+
+
+
           // Create EGL image
           std::cout << "Creating EGL image: " << width << " " << height << " " << format << " " << offset_x << " " << offset_y << " " << hor_stride << " " << ver_stride << std::endl;
           if (format != MPP_FMT_YUV420SP)
